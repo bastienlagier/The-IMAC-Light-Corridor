@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "3D_tools.h"
+#include "game.h"
 
 static const unsigned int WINDOW_WIDTH = 1000;
 static const unsigned int WINDOW_HEIGHT = 1000;
@@ -13,9 +13,6 @@ static const char WINDOW_TITLE[] = "The IMAC Light Corridor";
 static float aspectRatio = 1.0;
 
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
-
-static int flag_animate_rot_scale = 0;
-static int flag_animate_rot_arm = 0;
 
 void onError(int error, const char* description) {
 	fprintf(stderr, "GLFW Error: %s\n", description);
@@ -60,6 +57,7 @@ int main(int argc, char** argv) {
 
 	onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
 
+    glPointSize(5.0);
     glEnable(GL_DEPTH_TEST);
 
     while (!glfwWindowShouldClose(window)) {
@@ -67,13 +65,20 @@ int main(int argc, char** argv) {
 		double startTime = glfwGetTime();
 
 		/* Cleaning buffers and setting Matrix Mode */
-		glClearColor(0.2,0.0,0.0,0.0);
+		glClearColor(0.0,0.0,0.0,0.0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		setCamera();
+
+        glPushMatrix();
+			drawFrame();
+		glPopMatrix();
+
+        drawWalls();
+        drawBall();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

@@ -7,7 +7,7 @@ SRCDIR=src
 OBJDIR=obj
 
 GLOB_OBJ=$(OBJDIR)/3D_tools.o
-OBJ_FILES=$(GLOB_OBJ) $(OBJDIR)/main.o
+OBJ_FILES=$(GLOB_OBJ) $(OBJDIR)/main.o $(OBJDIR)/game.o
 EXEC_CORRIDOR=corridor
 
 all : corridor

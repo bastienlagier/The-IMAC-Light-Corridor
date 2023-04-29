@@ -28,6 +28,15 @@ void drawSquare() {
 	glEnd();
 }
 
+void drawRectangle(float width, float height) {
+	glBegin(GL_POLYGON);
+		glVertex2f(-width, height);
+		glVertex2f(width, height);
+		glVertex2f(width, -height);
+		glVertex2f(-width, -height);
+	glEnd();
+}
+
 void drawCircle() {
 	glBegin(GL_TRIANGLE_FAN);
 		glVertex3f(0.0,0.0,0.0);
