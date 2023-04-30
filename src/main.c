@@ -7,8 +7,8 @@
 #include <math.h>
 #include "game.h"
 
-static const unsigned int WINDOW_WIDTH = 1000;
-static const unsigned int WINDOW_HEIGHT = 1000;
+static const unsigned int WINDOW_WIDTH = 800;
+static const unsigned int WINDOW_HEIGHT = 800;
 static const char WINDOW_TITLE[] = "The IMAC Light Corridor";
 static float aspectRatio = 1.0;
 
@@ -73,12 +73,16 @@ int main(int argc, char** argv) {
 		glLoadIdentity();
 		setCamera();
 
-        glPushMatrix();
-			drawFrame();
+		glPushMatrix();
+			glTranslatef(0.0, 0.0, 5.0);
+			drawBall();
 		glPopMatrix();
 
-        drawWalls();
-        drawBall();
+        
+		glPushMatrix();
+			drawWalls();
+		glPopMatrix();
+		
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
