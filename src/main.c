@@ -255,11 +255,9 @@ int main(int argc, char** argv) {
 				}
 				
 				if (ball.x == oldX && ball.y == oldY) {
-					printf("ball %f %f | old %f %f\n", ball.x, ball.y, oldX, oldY);
 					bouncing = false;
 					if (ballHit(ball, cursor_x, cursor_y)) {
 						// impact de la balle
-						printf("heeyeey\n");
 					}
 					else {
 						nbLife--;

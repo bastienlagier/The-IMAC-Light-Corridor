@@ -166,10 +166,9 @@ void drawRectangleMove(float scale) {
 
 bool ballHit(Ball ball, float x, float y) {
 	Point pointB, pointR;
-	pointB.x = convertClic(ball.x);
-	pointB.y = convertClic(ball.y);
+	pointB.x = ball.x;
+	pointB.y = ball.y;
 	pointR.x = x;
 	pointR.y = y;
-	printf("Dist : %f\n", distance(pointB, pointR));
-	return distance(pointB, pointR) <= convertClic(80.);
+	return distance(pointR, pointB) <= 0.09;
 }
