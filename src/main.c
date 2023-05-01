@@ -25,6 +25,8 @@ void onError(int error, const char* description) {
 Point pos_actual;
 float rectangleMove1;
 float rectangleMove2;
+Ball ball;
+
 
 void onWindowResized(GLFWwindow* window, int width, int height) {
 	aspectRatio = width / (float) height;
@@ -69,8 +71,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		glfwGetCursorPos(window, &xpos, &ypos);
 		printf("%f %f\n", xpos, ypos);
 
+		if (ball.direction == NONE) {
+			ball.direction = STRAIGHT;
+		}
 	}
-
 }
 
 
@@ -104,6 +108,8 @@ int main(int argc, char** argv) {
 
     glPointSize(5.0);
     glEnable(GL_DEPTH_TEST);
+
+	ball.direction = NONE;
 
     pos_actual.x=0.;
 	pos_actual.y=0.;
@@ -147,15 +153,17 @@ int main(int argc, char** argv) {
 				cursor_y = convertClic(460.);
 			}
 
+			if (ball.direction == NONE) {
+				ball.x = cursor_x;
+				ball.y = cursor_y;
+				ball.z = 0;
+				drawBall(ball);
+			}
 			glTranslatef(cursor_x, cursor_y, 0);
 			drawCursor();
 
 		glPopMatrix();
 
-		glPushMatrix();
-			//glTranslatef(0.0, 0.0, 5.0);
-			drawBall();
-		glPopMatrix();
 
 		glPushMatrix();
 			drawRectangleMove(rectangleMove1);
@@ -172,6 +180,23 @@ int main(int argc, char** argv) {
 			drawWalls();
 		glPopMatrix();
 		
+
+		glPushMatrix();
+			//glTranslatef(0.0, 0.0, 5.0);
+			if (ball.direction != NONE) {
+				drawBall(ball);
+			}	
+		glPopMatrix();
+
+		switch (ball.direction) {
+			case STRAIGHT:
+			// ajouter vérif obstacle et mur ici
+			ball.z += FRAMERATE_IN_SECONDS;
+			break;
+			default:
+			break;
+		}
+
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

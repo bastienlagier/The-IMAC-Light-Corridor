@@ -15,9 +15,10 @@ float convertClic(float nbr){
 
 }
 
-void drawBall() {
+void drawBall(Ball ball) {
     glColor3f(0.8, 1.0, 1.0);
     glPushMatrix();
+		glTranslatef(ball.x, ball.y, ball.z);
         glScalef(0.05, 0.05, 0.05); //balle de taille 40
         drawSphere();
     glPopMatrix();

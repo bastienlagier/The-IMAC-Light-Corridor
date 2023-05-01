@@ -6,7 +6,26 @@ struct Point{
 	float y;
 };
 
-void drawBall();
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    UP_LEFT,
+    UP_RIGHT,
+    DOWN_LEFT,
+    DOWN_RIGHT,
+    STRAIGHT,
+    NONE
+};
+
+
+typedef struct Ball {
+    float x, y, z;
+    enum Direction direction;
+} Ball;
+
+void drawBall(Ball ball);
 void drawWalls();
 void drawFrame();
 void drawCursor();
