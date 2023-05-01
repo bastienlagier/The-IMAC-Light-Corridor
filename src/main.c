@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 #include "game.h"
 
 static const unsigned int WINDOW_WIDTH = 800;
@@ -17,6 +18,10 @@ static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 /* Virtual windows space */
 // Space is defined in interval -1 and 1 on x and y axes
 static const float GL_VIEW_SIZE = 1.;
+
+// coordonnées z du dernier mur
+static const float depth = 100; 
+
 
 void onError(int error, const char* description) {
 	fprintf(stderr, "GLFW Error: %s\n", description);
@@ -188,10 +193,33 @@ int main(int argc, char** argv) {
 			}	
 		glPopMatrix();
 
+		float oldX, oldY;
+		oldX = ball.x;
+		oldY = ball.y;
+
 		switch (ball.direction) {
 			case STRAIGHT:
-			// ajouter vérif obstacle et mur ici
-			ball.z += FRAMERATE_IN_SECONDS;
+			if (ball.x <= convertClic(200.+40.)) {
+				ball.x += FRAMERATE_IN_SECONDS/2;
+			}
+			if (ball.x >= convertClic(600.-40.)) {
+				ball.x -= FRAMERATE_IN_SECONDS/2;
+			}
+			if (ball.y <= convertClic(125.+40.)) {
+				ball.y += FRAMERATE_IN_SECONDS/2;
+			}
+			if (ball.y >= convertClic(375.-40.)) {
+				ball.y -= FRAMERATE_IN_SECONDS/2;
+			}
+			if (ball.x != oldX || ball.y != oldY) {
+				break;
+			}
+			if (ball.z <= depth) {
+				ball.z += FRAMERATE_IN_SECONDS;
+			}
+			if (ball.z >= depth) {
+				ball.z -= FRAMERATE_IN_SECONDS;
+			}
 			break;
 			default:
 			break;
