@@ -10,3 +10,5 @@ void drawBall();
 void drawWalls();
 void drawFrame();
 void drawCursor();
+float convertClic(float nbr);
+void drawRectangleMove(float scale);
