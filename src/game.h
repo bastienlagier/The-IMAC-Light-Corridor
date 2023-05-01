@@ -1,4 +1,5 @@
 #include "3D_tools.h"
+#include "stdbool.h"
 
 typedef struct Point Point;
 struct Point{
@@ -31,3 +32,5 @@ void drawFrame();
 void drawCursor();
 float convertClic(float nbr);
 void drawRectangleMove(float scale);
+float distance(Point a, Point b);
+bool ballHit(Ball ball, float x, float y);

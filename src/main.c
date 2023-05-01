@@ -122,6 +122,14 @@ int main(int argc, char** argv) {
 	rectangleMove1 = 1.;
 	rectangleMove2 = 1.5;
 
+	bool bouncing = false;
+	Point bouncing_point;
+	bouncing_point.x = 0;
+	bouncing_point.y = 0;
+
+	int nbLife = 3;
+
+
     while (!glfwWindowShouldClose(window)) {
 
 		/* Get time (in second) at loop beginning */
@@ -162,6 +170,8 @@ int main(int argc, char** argv) {
 				ball.x = cursor_x;
 				ball.y = cursor_y;
 				ball.z = 0;
+				bouncing_point.x = ball.x;
+				bouncing_point.y = ball.y;
 				drawBall(ball);
 			}
 			glTranslatef(cursor_x, cursor_y, 0);
@@ -193,32 +203,69 @@ int main(int argc, char** argv) {
 			}	
 		glPopMatrix();
 
-		float oldX, oldY;
+		float oldX, oldY, oldZ;
 		oldX = ball.x;
 		oldY = ball.y;
+		oldZ = ball.z;
 
 		switch (ball.direction) {
 			case STRAIGHT:
-			if (ball.x <= convertClic(200.+40.)) {
+			if (ball.x <= convertClic(200.+40.) && !bouncing) {
 				ball.x += FRAMERATE_IN_SECONDS/2;
 			}
-			if (ball.x >= convertClic(600.-40.)) {
+			if (ball.x >= convertClic(600.-40.) && !bouncing) {
 				ball.x -= FRAMERATE_IN_SECONDS/2;
 			}
-			if (ball.y <= convertClic(125.+40.)) {
+			if (ball.y <= convertClic(125.+40.) && !bouncing) {
 				ball.y += FRAMERATE_IN_SECONDS/2;
 			}
-			if (ball.y >= convertClic(375.-40.)) {
+			if (ball.y >= convertClic(375.-40.) && !bouncing) {
 				ball.y -= FRAMERATE_IN_SECONDS/2;
 			}
 			if (ball.x != oldX || ball.y != oldY) {
 				break;
 			}
-			if (ball.z <= depth) {
+			if (ball.z < convertClic(depth) && !bouncing) {
 				ball.z += FRAMERATE_IN_SECONDS;
+				break;
 			}
-			if (ball.z >= depth) {
-				ball.z -= FRAMERATE_IN_SECONDS;
+			if (ball.z >= 0) {
+				if (!bouncing) {
+					bouncing = true;
+				}
+				ball.z -= FRAMERATE_IN_SECONDS/2;
+			}
+			if (ball.z != oldZ) {
+				break;
+			}
+			oldX = ball.x;
+			oldY = ball.y;
+			if (bouncing) {
+				if (ball.x <= bouncing_point.x) {
+					ball.x += FRAMERATE_IN_SECONDS/2;
+				}
+				if (ball.x >= bouncing_point.x) {
+					ball.x -= FRAMERATE_IN_SECONDS/2;
+				}
+				if (ball.y <= bouncing_point.y) {
+					ball.y += FRAMERATE_IN_SECONDS/2;
+				}
+				if (ball.y >= bouncing_point.y) {
+					ball.y -= FRAMERATE_IN_SECONDS/2;
+				}
+				
+				if (ball.x == oldX && ball.y == oldY) {
+					printf("ball %f %f | old %f %f\n", ball.x, ball.y, oldX, oldY);
+					bouncing = false;
+					if (ballHit(ball, cursor_x, cursor_y)) {
+						// impact de la balle
+						printf("heeyeey\n");
+					}
+					else {
+						nbLife--;
+						ball.direction = NONE;
+					}
+				}
 			}
 			break;
 			default:
@@ -236,6 +283,11 @@ int main(int argc, char** argv) {
 		double elapsedTime = glfwGetTime() - startTime;
 		if (elapsedTime < FRAMERATE_IN_SECONDS) {
 			glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
+		}
+
+		if (nbLife <= 0) {
+			// défaite, fin du jeu
+			break;
 		}
     }
     glfwTerminate();

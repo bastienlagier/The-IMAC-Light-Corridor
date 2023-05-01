@@ -139,6 +139,10 @@ void drawCursor() {
 
 }
 
+float distance(Point a, Point b) {
+	return sqrt(pow(b.x-a.x, 2) + pow(b.y-a.y, 2));
+}
+
 
 void drawRectangleMove(float scale) {
 
@@ -158,4 +162,14 @@ void drawRectangleMove(float scale) {
 
 	glPopMatrix();
 
+}
+
+bool ballHit(Ball ball, float x, float y) {
+	Point pointB, pointR;
+	pointB.x = convertClic(ball.x);
+	pointB.y = convertClic(ball.y);
+	pointR.x = x;
+	pointR.y = y;
+	printf("Dist : %f\n", distance(pointB, pointR));
+	return distance(pointB, pointR) <= convertClic(80.);
 }
